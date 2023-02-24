@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+{% comment %} <button><a href="{% url 'home' %}">Home</a></button> {% endcomment %}
+  <h1>UPDATE</h1>
+    {% comment %} <h3>Welcome {{name}}</h3> {% endcomment %}
+    <form action="" method="post"  enctype="multipart/form-data">
+      {% csrf_token %}
+      {{form.as_p}}
+      <input style="background-color:blue" type="submit" value="Save" /><br>
+  </form>
+    <button style="background-color:pink"><a href="{% url 'logout' %}">Logout</a></button> 
+    
+{% endblock %}

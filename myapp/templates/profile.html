@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% comment %}
+    <button><a href="{% url 'update' %}">UPDATE</a></button>
+    <button><a href="{% url 'home' %}">Home</a></button>
+    <button><a href="{% url 'create_post' %}">Create Post</a></button>
+    {% endcomment %}
+    <title>Welcome {{user.username}}</title>
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+    <style>
+      img {
+        height: 300px;
+        width: 300px;
+      }
+      nav {
+        background-color: black;
+        width: 100%;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 0;
+        position: relative;
+        z-index: 2;
+      }
+      nav ul li {
+        padding-top: 10px;
+        display: inline-block;
+        list-style: none;
+        margin: 10px 30px;
+
+      }
+      nav ul li a {
+         text-decoration: none;
+         {% comment %} text-color: white; {% endcomment %}
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 20px;
+        text-color: brown;
+      }
+      .text {
+        position: absolute;
+        display: inline-block;
+        text-decoration: none;
+        color: white;
+        background-color: red;
+        padding: 10px 30px;
+        margin-top: 100px;
+        border-radius: 8px;
+        border-color: black;
+        top: 10px;
+        right: 50%;
+        z-index: 1;
+      }
+      .im{
+        background-color: yellowgreen;
+        padding: 10px 30px;
+        width: 70%;
+        border-radius: 20px;
+        border-color: black;
+        height:340px;
+      }
+    </style>
+  </head>
+  <body style=background-color:pink;>
+    <nav>
+      <div class="container">
+        <ul>
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="{% url 'update' %}">Update</a></li>
+          <li><a href="{% url 'create_post' %}">Create Post</a></li>
+        </ul>
+      </div>
+    </nav>
+    <center> 
+       <h1>Profile</h1>
+    </center>
+    <div class="im">
+      {% for i in details %}
+      <div ><img src="{{i.picture.url}}" alt="" /></div>
+      <div class="text">
+        <h2>Firstname:{{i.first_name}}</h2>
+        <h2>Lastname:{{i.last_name}}</h2>
+        <h2>Place:{{i.place}}</h2>
+        <h2>Zipcode:{{i.zipcode}}</h2>
+        <h2>DOB:{{i.dob}}</h2>
+        {% for j in user %}
+        <h2>Username:{{j.username}}</h2>
+        <h2>Email:{{j.email}}</h2>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+   </div>
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/poper.js' %}"></script>
+    <script src="{% static 'js/all.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Home Page</h2> 
+    <div class="container" style="text-align:center">
+    {% if posts %}
+        {% for post in posts %}
+            <div class="post" >
+                <h3>{{ post.title }}</h3>
+                <img src="{{post.image.url}}" alt="">
+                <p>{{ post.content }}</p>
+                <p>Author: {{ post.author }}</p>
+                <p>Date: {{ post.created_at }}</p>
+                <form action="{% url 'like_post' post.id %}" method="post" novalidate>
+                    {% csrf_token %}
+                    <p>Likes: {{ post.likes.count }}</p>
+                    {% if user_id %}
+                    {% if post.title in liked_list %}
+                    <button class="btn btn-dark" class="like-btn" type="submit">Dislike</button>
+                    {% else %}
+                    <button class="btn btn-info"  class="like-btn" type="submit">Like</button>
+                    {% endif %}
+                    {% else %}
+                    <button class="btn btn-primary"  class="like-btn" type="submit">Like</button>
+                    {% endif %}
+                    {% if post.author.user == user %}
+                    <a href="{% url 'delete_post' post.id %}" class="btn btn-danger">Delete</a>
+                    {% endif %}
+                  </form>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No posts found.</p>
+    {% endif %}
+</div>
+{% endblock %}
