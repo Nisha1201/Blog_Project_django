@@ -6,7 +6,27 @@ from .forms import  ProfileForm,PostForm,UserForm
 from .models import Profile, Post
 from django.contrib.auth.models import User
 import pdb
-from django.urls import reverse
+
+def home(request):
+    posts = Post.objects.all().order_by('-created_at')
+    # form = PostForm()
+    # print(form,'pppppppppppppppppppppppppppppppp')
+    if request.user.id is not None:
+        user_id=request.user.id
+        print(user_id)
+        liked_list=[]
+        like_post=Post.objects.filter(likes=user_id)
+        for i in like_post:
+            liked_list.append(i.title)
+        print(like_post)
+        print("lnkjanjknjknkjsbahjbjkbsakj-----------------")
+        context = {'posts': posts,'user_id':user_id,'liked_list':liked_list}
+    else:
+        context = {'posts': posts}
+    print("bhjasbhjbkjsha",posts)
+    return render(request, 'home.html', context)
+
+
 def signup(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
@@ -43,27 +63,6 @@ def user_login(request):
     return render(request, 'login.html')
 
 @login_required
-def update(request):
-    profile = get_object_or_404(Profile, user=request.user)
-    user_name=request.user
-    # user=get_object_or_404(User)
-    # print(user,"slknldslknskllkdn")
-    if request.method == 'POST':
-        print(request.POST,"HHHHHHHHHHHHHHHHHHHHHHHH")
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
-
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Profile updated successfully')
-            return redirect('profile')
-    else:
-        # user_form = UserForm(instance=user)
-        form = ProfileForm(instance=profile)
-        
-    context = {'form': form,'name':user_name}
-    return render(request, 'update.html', context)
-
-@login_required
 # @user_passes_test(user_login)
 def profile(request):
     profile = get_object_or_404(Profile, user=request.user)
@@ -88,6 +87,31 @@ def create_post(request):
         form = PostForm()
     context = {'form': form}
     return render(request, 'create_post.html', context)
+
+
+
+
+@login_required
+def update(request):
+    profile = get_object_or_404(Profile, user=request.user)
+    user_name=request.user
+    # user=get_object_or_404(User)
+    # print(user,"slknldslknskllkdn")
+    if request.method == 'POST':
+        print(request.POST,"HHHHHHHHHHHHHHHHHHHHHHHH")
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully')
+            return redirect('profile')
+    else:
+        # user_form = UserForm(instance=user)
+        form = ProfileForm(instance=profile)
+        
+    context = {'form': form,'name':user_name}
+    return render(request, 'update.html', context)
+
 
 
 @login_required
@@ -123,24 +147,7 @@ def dislike_post(request, id):
             post.likes.remove(request.user)
     return redirect('home')
 
-def home(request):
-    posts = Post.objects.all().order_by('-created_at')
-    # form = PostForm()
-    # print(form,'pppppppppppppppppppppppppppppppp')
-    if request.user.id is not None:
-        user_id=request.user.id
-        print(user_id)
-        liked_list=[]
-        like_post=Post.objects.filter(likes=user_id)
-        for i in like_post:
-            liked_list.append(i.title)
-        print(like_post)
-        print("lnkjanjknjknkjsbahjbjkbsakj-----------------")
-        context = {'posts': posts,'user_id':user_id,'liked_list':liked_list}
-    else:
-        context = {'posts': posts}
-    print("bhjasbhjbkjsha",posts)
-    return render(request, 'home.html', context)
+
 
 @login_required
 def delete_post(request, id):
@@ -158,5 +165,6 @@ def delete_post(request, id):
 def user_logout(request):
     logout(request)
     return redirect('login')
+
 
 
